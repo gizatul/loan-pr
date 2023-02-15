@@ -1,13 +1,13 @@
-export default class Slider { //сразу экспорт класса
+export default class Slider { 
     constructor({container = null, 
         btns = null, 
         next = null, 
         prev = null,
         activeClass = '',
         animate,
-        autoplay } = {}) { //передаем сразу объект ()   
+        autoplay } = {}) { 
         this.container = document.querySelector(container);
-        try {this.slides = this.container.children;} catch(e){} //children - это каждый отдельный слайд //try_catch используем т.к. выходит ошибка на 2-й странице module. пытаемся выполнить если только получен котейнер
+        try {this.slides = this.container.children;} catch(e){} 
         this.btns = document.querySelectorAll(btns);
         this.prev = document.querySelector(prev);
         this.next = document.querySelector(next);
@@ -17,5 +17,3 @@ export default class Slider { //сразу экспорт класса
         this.slideIndex = 1;
     }    
 }
-// класс будет создавать элементы только при вызове через new
-//this - ссылка на экземпляр класса

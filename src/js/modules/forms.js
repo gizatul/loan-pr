@@ -8,13 +8,14 @@ export default class Forms {
             failure: 'Something went wrong...',
         };
     }
-    async postData(url, data) { //асинхронная ф-я - async
-        let res = await fetch(url, { //асинхронная операция await, чтобы JS дождался выполнения операции, т.к. ответ от сервера может идти долго
+
+    async postData(url, data) { 
+        let res = await fetch(url, { 
             method: 'POST',
             body: data,
         });
-        return await res.text(); //возврат текстовых данных(в данном случае, тоже ждем окончания операции (await)
-    };
+        return await res.text(); 
+    }
 
     clearInputs () {
         this.inputs.forEach(input => {
@@ -26,69 +27,63 @@ export default class Forms {
         const mailInputs = document.querySelectorAll('[type="email"]');
         mailInputs.forEach(item => {
             item.addEventListener('input', () => {
-                item.value = item.value.replace(/[^a-z @ 0-9 \.]/ig, ''); //при введении не цифр вводится пустая строка
+                item.value = item.value.replace(/[^a-z @ 0-9 \.]/ig, ''); 
             });
         }); 
-    };
+    }
 
     initMask() {
-        //Ф-я установки позиция курсора
-        let setCursorPosition = (pos, elem) => { //в pos будет кол-во символов //elem -this - объект с которым мы будем работать
-            elem.focus(); //вручную ставим focus на элементе
+        let setCursorPosition = (pos, elem) => { 
+            elem.focus(); 
             
             if (elem.setSelectionRange) { 
                elem.setSelectionRange(pos, pos); 
-            } else if (elem.createTextRange) { //Ниже пойдет ручной полифилл для старых браузеров IE
-                let range = elem.createTextRange(); // создание диапазона, кот-й нужно выделить
-                //с помощью метода createTextRange создается Объект TextRange
+            } else if (elem.createTextRange) { 
+                let range = elem.createTextRange(); 
       
-                range.collapse(true); //Метод collapse объединяет граничные точки диапазона, т.е. первое с последней позицией
-                range.moveEnd('character', pos); //указываем коду где будет конечная точка выделения. character - символ
-                range.moveStart('character', pos); //указываем коду где будет конечная точка выделения (в итоге будет одно и то же место)
-                range.select(); //установка курсора и выделение того значения которое сформировалось при помощи 2-х предыдущих параметров(move)
+                range.collapse(true); 
+                range.moveEnd('character', pos); 
+                range.moveStart('character', pos); 
+                range.select(); 
             }
         };
       
         function createMask(event) {
-            let matrix = `+1 (___) ___-____`, //матрица для создания
-                i = 0, //итератор
-                def = matrix.replace(/\D/g, ''), //значение статичное на основе матрицы - default (получаем все НЕцифры)
-                val = this.value.replace(/\D/g, ''); //значение динамичное на основании что ввел пользователь
+            let matrix = `+1 (___) ___-____`, 
+                i = 0, 
+                def = matrix.replace(/\D/g, ''), 
+                val = this.value.replace(/\D/g, ''); 
             
             if (def.length >= val.length) {
-                val = def; // если пользователь вдруг удаляет семерку и плюс, то у него не получится
+                val = def; 
             }
-            this.value = matrix.replace(/./g, function(a) {//перебор символов в матрице и возврат в зависимости от определенных условий // a - тех. аргумент
+
+            this.value = matrix.replace(/./g, function(a) {
                 return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
             });
-            ///[_\d]/ - диапазон поиска цифр и подчеркиваний
-            //Метод regexp.test(str) ищет совпадение и возвращает true/false, в зависимости от того, находит ли он его.
-            //val.charAt(i++) - метод charAt() возвращает символ по заданному индексу внутри строки
-      
-            // Отработка события blur/focus
-            if (event.type === 'blur') { //если пользователь нажал вне инпута 
-                if (this.value.length == 2) { // если в инпуте 2 символа
-                    this.value = ''; // то очистим инпут
+               
+            if (event.type === 'blur') { 
+                if (this.value.length == 2) { 
+                    this.value = ''; 
                 }
-                } else { // если focus
-                    setCursorPosition(this.value.length, this);//то срабатывает эта ф-я //this.value.length - кол-во символов
-                }
+            } else { 
+                setCursorPosition(this.value.length, this);
             }
-            // событие focus вызывается в момент фокусировки, а blur – когда элемент теряет фокус.
-        
+        }
+            
         let inputs = document.querySelectorAll('[name="phone"');
         inputs.forEach(input => {
             input.addEventListener('input', createMask);
-            input.addEventListener('keypress', createMask); //обработчик keypress, который срабатывает от нажатия на клавишу и ещё до того, как был введён какой-то символ, перемещает курсор перед кодом страны
+            input.addEventListener('keypress', createMask); 
             input.addEventListener('focus', createMask);
             input.addEventListener('blur', createMask);
-        });
-      
+        }); 
     }
 
     init() {
         this.initMask();
         this.checkMailInputs();
+
         this.forms.forEach(form => {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -102,31 +97,31 @@ export default class Forms {
                 `;
                 statusMessage.textContent = this.message.loading;
         
-                form.classList.add('animated', 'fadeOutUp'); //форма станет прозрачной
+                form.classList.add('animated', 'fadeOutUp'); 
                 setTimeout(() => {
-                    form.style.display = 'none'; //потом еще и исчезнет
+                    form.style.display = 'none'; 
                 }, 400);
     
                 const formData = new FormData(form);
+
                 this.postData('assets/question.php', formData)
                 .then(res => {
                     console.log(res);
-                    statusMessage.textContent = this.message.success; //плашка об успешности
+                    statusMessage.textContent = this.message.success; 
                 })
                 .catch(() => {
-                    statusMessage.textContent = this.message.failure; //плашка о неудаче   
+                    statusMessage.textContent = this.message.failure; 
                 })
                 .finally(() => {
                     this.clearInputs();
                     setTimeout(() => {
-                        statusMessage.remove(); //удаляем сообщение через 5 сек
-                        form.style.display = 'block'; //появление формы обратно 
+                        statusMessage.remove(); 
+                        form.style.display = 'block'; 
                         form.classList.remove('fadeOutUp');
                         form.classList.remove('fadeInUp');
                     }, 5000);
                 });
             });
         });
-            
     }
 }

@@ -7,7 +7,7 @@ import ShowInfo from "./modules/showInfo";
 import Download from "./modules/download";
 
 window.addEventListener('DOMContentLoaded', () => {
-    const mainSlider = new MainSlider({ //экземпляр класс
+    const mainSlider = new MainSlider({ 
         btns: '.next',
         container: '.page'
     }); 

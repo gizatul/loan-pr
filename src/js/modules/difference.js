@@ -9,7 +9,7 @@ export default class Difference {
             this.newCounter = 0;
         } catch(e){}
     }
-    //Добавление карточки по клику
+    
     bindTriggers (container, counter, items) {
         container.querySelector('.plus').addEventListener('click', () => {
             items[counter].classList.add('animated', 'fadeIn');
@@ -22,7 +22,7 @@ export default class Difference {
             }
         });
     }
-    //Предварительное скрытие карточек
+    
     hideItems(items) {
         items.forEach((item, i, arr) => {
             if (i !== arr.length - 1) {
@@ -30,6 +30,7 @@ export default class Difference {
             }
         });
     }
+    
     init() {
         try {
             this.hideItems(this.oldItems);

@@ -1,11 +1,12 @@
 import Slider from "./slider";
 
-export default class MainSlider extends Slider { //получаем доступ ко всем св-м и методам класса Slider
+export default class MainSlider extends Slider { 
     constructor (btns) {
-        super(btns); //В конструкторе ключевое слово super() используется как функция, вызывающая родительский конструктор. Её необходимо вызвать до первого обращения к ключевому слову this в теле конструктора. Ключевое слово super также может быть использовано для вызова функций родительского объекта. // в данном случае наследовали this.btns
+        super(btns); 
         this.nextModule = document.querySelectorAll('.nextmodule');
         this.prevModule = document.querySelectorAll('.prevmodule');
     }
+
     showSlides(n) {
         if (n > this.slides.length) {
             this.slideIndex = 1;
@@ -13,8 +14,8 @@ export default class MainSlider extends Slider { //получаем доступ
         if (n < 1) {
             this.slideIndex = this.slides.length;
         }
-        // Добавление появления hanson
-        try {  //try/catch используем так как в других слайдах нет hanson
+        
+        try {  
             this.hanson.style.opacity = '0';
 
             if (n === 3) {
@@ -28,11 +29,10 @@ export default class MainSlider extends Slider { //получаем доступ
             }
         }catch(e){}
         
-
         this.slides.forEach(slide => {
-            slide.style.display = 'none'; //скрываем все слайды
+            slide.style.display = 'none'; 
         });
-        this.slides[this.slideIndex - 1].style.display = 'block'; //показываем нужный слайд
+        this.slides[this.slideIndex - 1].style.display = 'block'; 
     }
     
     plusSlides(n) {
@@ -57,10 +57,11 @@ export default class MainSlider extends Slider { //получаем доступ
                 });
                 this.plusSlides(1);
             });
+            
             btn.parentNode.previousElementSibling.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.slideIndex = 1;
-                this.showSlides(this.slideIndex); // при клике будет первый слайд
+                this.showSlides(this.slideIndex); 
             });
         });
 
@@ -69,8 +70,8 @@ export default class MainSlider extends Slider { //получаем доступ
     }
 
     render() {
-        if (this.container) { //условие для избежания ошибки с container //если есть такой container 
-            try { //try/catch т.к. в других слайдах нет hanson
+        if (this.container) { 
+            try { 
                 this.hanson = document.querySelector('.hanson');
             } catch(e){}
             this.showSlides(this.slideIndex);  
